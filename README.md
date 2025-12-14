@@ -1,16 +1,97 @@
-# React + Vite
+# DevPain AI 🚀
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**DevPain AI** is a SaaS web application designed to help students, beginners, and developers understand code in simple, human-friendly language. It uses Google's Gemini AI to break down complex logic into easy-to-understand explanations, analogies, and structured analysis.
 
-Currently, two official plugins are available:
+![DevPain AI Screenshot](screenshot_placeholder.png) *Add a screenshot here*
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
 
-## React Compiler
+- **Beginner Mode**: Explains code using real-world analogies (e.g., "This loop is like a shopping list").
+- **Interview Mode**: Focuses on algorithmic complexity (Time/Space) and technical terminology.
+- **Hinglish Support**: Generates explanations in a mix of Hindi and English for better accessibility.
+- **Deep Analysis**:
+    - **Line-by-Line Breakdown**: Hoverable code snippets with clear explanations.
+    - **Logic Flow**: Step-by-step execution path.
+    - **Bad Practices**: Detects inefficiencies, bugs, and security risks.
+    - **Improved Version**: Auto-refactors code with a "Copy" button.
+- **PDF Download**: Generate and download a clean, structured PDF report of the analysis.
+- **Developer UI**: Dark mode, responsive design, and developer-friendly aesthetics.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠️ Tech Stack
 
-## Expanding the ESLint configuration
+- **Frontend**: React (Vite), Vanilla CSS (Custom Design System)
+- **Backend**: Node.js, Express
+- **AI Engine**: Google Gemini API (`gemini-2.5-flash` / `gemini-1.5-flash`)
+- **PDF Generation**: `jspdf` (Client-side)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## ⚙️ Prerequisites
+
+- **Node.js** (v18 or higher) installed.
+- **Google Gemini API Key**: Get one for free at [Google AI Studio](https://aistudio.google.com/app/apikey).
+
+## 🚀 Installation & Setup
+
+### 1. Clone the Repository
+```bash
+git clone <repository_url>
+cd DevPain-AI
+```
+
+### 2. Setup Backend
+The backend handles the connection to the AI model.
+
+```bash
+cd server
+npm install
+```
+
+**Configuration**:
+Create a `.env` file in the `server` directory:
+```env
+PORT=5001
+GEMINI_API_KEY=your_actual_api_key_here
+```
+
+### 3. Setup Frontend
+The frontend is the React application.
+
+```bash
+# Go back to root
+cd .. 
+npm install
+```
+
+## 🏃‍♂️ How to Run
+
+You need to run both the backend and frontend terminals.
+
+**Terminal 1 (Backend):**
+```bash
+cd server
+npm run dev
+```
+*Server runs on: `http://localhost:5001`*
+
+**Terminal 2 (Frontend):**
+```bash
+npm run dev
+```
+*Frontend runs on: `http://localhost:5173`*
+
+## 🔍 Troubleshooting
+
+- **500 Internal Server Error**: 
+    - Check your `.env` file in the `server` folder.
+    - Ensure `GEMINI_API_KEY` is correct and has no extra spaces.
+    - Ensure you have internet access.
+- **Port Conflicts**:
+    - The backend uses port `5001`. If it stays "Address in use", you can change the `PORT` in `.env` and restart.
+- **AI Model Not Found**:
+    - If `gemini-2.5-flash` fails, edit `server/index.js` and switch to `gemini-1.5-flash`.
+
+## 🤝 Contributing
+
+Feel free to fork and submit PRs!
+
+---
+*Built with ❤️ for developers who feel the pain of legacy code.*
