@@ -4,6 +4,8 @@ import { Controls } from './components/Controls';
 import { CodeInput } from './components/CodeInput';
 import { OutputArea } from './components/OutputArea';
 
+import { generatePDF } from './utils/pdfGenerator';
+
 function App() {
   const [language, setLanguage] = useState('java');
   const [complexity, setComplexity] = useState('beginner');
@@ -12,6 +14,11 @@ function App() {
   const [explanation, setExplanation] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const handleDownload = () => {
+    if (!explanation) return;
+    generatePDF(explanation, language, complexity);
+  };
 
   const handleExplain = async () => {
     if (!code.trim()) {
@@ -66,6 +73,8 @@ function App() {
           setOutputLanguage={setOutputLanguage}
           onExplain={handleExplain}
           isLoading={isLoading}
+          onDownload={handleDownload}
+          hasResult={!!explanation}
         />
         <div style={{
           display: 'grid',

@@ -43,6 +43,8 @@ export function Controls({
     complexity, setComplexity,
     outputLanguage, setOutputLanguage,
     onExplain,
+    onDownload,
+    hasResult,
     isLoading
 }) {
     return (
@@ -98,6 +100,28 @@ export function Controls({
                         <option value="python">Python</option>
                     </select>
                 </div>
+
+                {hasResult && (
+                    <button
+                        onClick={onDownload}
+                        style={{
+                            background: 'transparent',
+                            color: 'var(--accent)',
+                            border: '1px solid var(--accent)',
+                            padding: '0.6rem 1.5rem',
+                            borderRadius: '6px',
+                            fontSize: '0.95rem',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            marginRight: '0.5rem',
+                            transition: 'all 0.2s'
+                        }}
+                        onMouseOver={(e) => e.currentTarget.style.background = 'rgba(88, 166, 255, 0.1)'}
+                        onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+                    >
+                        Download PDF
+                    </button>
+                )}
 
                 <button
                     onClick={onExplain}
