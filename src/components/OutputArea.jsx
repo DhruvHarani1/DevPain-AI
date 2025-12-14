@@ -134,15 +134,67 @@ export function OutputArea({ explanation, isLoading, error }) {
 
                     {explanation.logicFlow && (
                         <CollapsibleSection title="3. Logic flow">
-                            <p style={{ whiteSpace: 'pre-wrap' }}>{explanation.logicFlow}</p>
+                            {Array.isArray(explanation.logicFlow) ? (
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                                    {explanation.logicFlow.map((step, idx) => (
+                                        <div key={idx} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+                                            <div style={{
+                                                background: 'var(--bg-tertiary)',
+                                                border: '1px solid var(--border)',
+                                                color: 'var(--text-secondary)',
+                                                width: '24px',
+                                                height: '24px',
+                                                borderRadius: '50%',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                fontSize: '0.8rem',
+                                                fontWeight: 600,
+                                                flexShrink: 0,
+                                                marginTop: '2px'
+                                            }}>
+                                                {idx + 1}
+                                            </div>
+                                            <div style={{ color: 'var(--text-primary)', lineHeight: '1.6' }}>
+                                                {step}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <p style={{ whiteSpace: 'pre-wrap' }}>{explanation.logicFlow}</p>
+                            )}
                         </CollapsibleSection>
                     )}
 
                     {explanation.issues && (
                         <CollapsibleSection title="4. Problems / Bad practices">
-                            <div style={{ borderLeft: '3px solid #dba642', paddingLeft: '1rem', background: 'rgba(219, 166, 66, 0.1)', padding: '0.5rem 1rem' }}>
-                                <p style={{ whiteSpace: 'pre-wrap', margin: 0 }}>{explanation.issues}</p>
-                            </div>
+                            {Array.isArray(explanation.issues) ? (
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                                    {explanation.issues.map((issue, idx) => (
+                                        <div key={idx} style={{
+                                            display: 'flex',
+                                            gap: '0.8rem',
+                                            alignItems: 'flex-start',
+                                            background: 'rgba(219, 166, 66, 0.1)',
+                                            border: '1px solid rgba(219, 166, 66, 0.2)',
+                                            padding: '0.8rem',
+                                            borderRadius: '6px'
+                                        }}>
+                                            <div style={{ color: '#dba642', fontSize: '1.2rem', lineHeight: 1 }}>
+                                                ⚠
+                                            </div>
+                                            <div style={{ color: 'var(--text-primary)', lineHeight: '1.5', fontSize: '0.95rem' }}>
+                                                {issue}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div style={{ borderLeft: '3px solid #dba642', paddingLeft: '1rem', background: 'rgba(219, 166, 66, 0.1)', padding: '0.5rem 1rem' }}>
+                                    <p style={{ whiteSpace: 'pre-wrap', margin: 0 }}>{explanation.issues}</p>
+                                </div>
+                            )}
                         </CollapsibleSection>
                     )}
 

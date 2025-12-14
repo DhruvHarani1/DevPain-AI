@@ -18,8 +18,14 @@ You MUST return a valid JSON object with the following structure:
       { "code": "code snippet", "explanation": "explanation" },
       { "code": "next line", "explanation": "next explanation" }
   ],
-  "logicFlow": "...",
-  "issues": "...",
+  "logicFlow": [
+      "Step 1...",
+      "Step 2..."
+  ],
+  "issues": [
+      "Issue 1...",
+      "Issue 2..."
+  ],
   "improvedVersion": "..."
 }
 ```
@@ -37,10 +43,14 @@ You MUST return a valid JSON object with the following structure:
 - **Hinglish Mode**: "Yeh line ek variable banati hai..."
 
 #### 3. Logic Flow
-- Explain how data moves through the code.
-- "First, we take the input. Then, we check if it's empty. If not, we update the counter..."
+- Return an **Array of Strings**.
+- Each string is a distinct step in the execution.
+- Example: ["User inputs data", "System validates input", "Output is printed"]
 
-#### 4. Issues / Bad Practices
+#### 4. Problems / Bad Practices
+- Return an **Array of Strings**.
+- Each string is a distinct issue or warning.
+- Example: ["Variable 'x' is unused", "Potential null pointer exception"]
 - Be gentle but firm.
 - Check for: Bad variable names (e.g., `x`, `temp`), inefficient loops ($O(n^2)$), missing validation, or security risks.
 

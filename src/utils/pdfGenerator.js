@@ -75,13 +75,27 @@ export const generatePDF = (explanation, language, complexity) => {
 
     if (explanation.logicFlow) {
         addText("3. Logic Flow", 14, 'bold');
-        addText(explanation.logicFlow);
+        if (Array.isArray(explanation.logicFlow)) {
+            explanation.logicFlow.forEach((step, idx) => {
+                addText(`${idx + 1}. ${step}`, 11, 'normal');
+                y += 2;
+            });
+        } else {
+            addText(explanation.logicFlow);
+        }
         y += 5;
     }
 
     if (explanation.issues) {
         addText("4. Potential Issues & Bad Practices", 14, 'bold', [200, 50, 50]);
-        addText(explanation.issues);
+        if (Array.isArray(explanation.issues)) {
+            explanation.issues.forEach(issue => {
+                addText(`• ${issue}`, 11, 'normal');
+                y += 2;
+            });
+        } else {
+            addText(explanation.issues);
+        }
         y += 5;
     }
 
