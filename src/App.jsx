@@ -9,15 +9,48 @@ function App() {
   const [complexity, setComplexity] = useState('beginner');
   const [outputLanguage, setOutputLanguage] = useState('english');
   const [code, setCode] = useState('');
-  const [explanation, setExplanation] = useState('');
+  const [explanation, setExplanation] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleExplain = () => {
-    // Mock functionality for UI skeleton
+  const handleExplain = async () => {
     if (!code.trim()) {
       alert("Please enter some code first.");
       return;
     }
-    setExplanation(`[Mock Explanation]\n\nMode: ${complexity.toUpperCase()}\nLanguage: ${outputLanguage.toUpperCase()}\n\nThis is where the simple explanation for your ${language} code will appear.\n\nIt works by analyzing the code you pasted...`);
+
+    setIsLoading(true);
+    setError(null);
+    setExplanation(null);
+
+    try {
+      const response = await fetch('http://localhost:5000/explain', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          code,
+          language,
+          complexity,
+          outputLanguage
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to get explanation');
+      }
+
+      setExplanation(data);
+
+    } catch (err) {
+      console.error(err);
+      setError(err.message || "Something went wrong.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -32,6 +65,7 @@ function App() {
           outputLanguage={outputLanguage}
           setOutputLanguage={setOutputLanguage}
           onExplain={handleExplain}
+          isLoading={isLoading}
         />
         <div style={{
           display: 'grid',
@@ -58,7 +92,11 @@ function App() {
             <CodeInput code={code} setCode={setCode} />
           </div>
           <div style={{ flex: '1 1 500px' }}>
-            <OutputArea explanation={explanation} />
+            <OutputArea
+              explanation={explanation}
+              isLoading={isLoading}
+              error={error}
+            />
           </div>
         </div>
 

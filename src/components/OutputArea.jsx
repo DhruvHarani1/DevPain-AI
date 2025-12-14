@@ -1,8 +1,57 @@
 import React from 'react';
 import { CollapsibleSection } from './CollapsibleSection';
 
-export function OutputArea({ explanation }) {
-    const hasContent = !!explanation;
+export function OutputArea({ explanation, isLoading, error }) {
+
+    if (isLoading) {
+        return (
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                flex: 1,
+                minHeight: '400px',
+                border: '1px solid var(--border)',
+                borderRadius: '6px',
+                overflow: 'hidden',
+                background: 'var(--bg-secondary)',
+                alignItems: 'center',
+                justifyContent: 'center'
+            }}>
+                <div style={{ color: 'var(--accent)', fontSize: '1.2rem', fontWeight: 600 }}>
+                    Analyzing logic...
+                </div>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '0.5rem' }}>
+                    Generating simple explanation
+                </p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                flex: 1,
+                minHeight: '400px',
+                border: '1px solid var(--border)',
+                borderRadius: '6px',
+                overflow: 'hidden',
+                background: 'var(--bg-secondary)',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '2rem',
+                textAlign: 'center'
+            }}>
+                <div style={{ color: '#ff6b6b', fontSize: '1.2rem', fontWeight: 600, marginBottom: '0.5rem' }}>
+                    Something went wrong
+                </div>
+                <p style={{ color: 'var(--text-secondary)' }}>
+                    {error}
+                </p>
+            </div>
+        );
+    }
 
     return (
         <div style={{
@@ -28,7 +77,7 @@ export function OutputArea({ explanation }) {
                 Explanation
             </div>
 
-            {!hasContent ? (
+            {!explanation ? (
                 <div style={{
                     padding: '2rem',
                     textAlign: 'center',
@@ -43,48 +92,46 @@ export function OutputArea({ explanation }) {
                 </div>
             ) : (
                 <div style={{ flex: 1, overflowY: 'auto' }}>
-                    <CollapsibleSection title="1. What this code does" defaultOpen={true}>
-                        <p>This code <strong>calculates the factorial</strong> of a given number. It basically takes an input integer and multiplies it by all positive integers less than it.</p>
-                        <p><em>(Placeholder for high-level summary)</em></p>
-                    </CollapsibleSection>
+                    {explanation.summary && (
+                        <CollapsibleSection title="1. What this code does" defaultOpen={true}>
+                            <p style={{ whiteSpace: 'pre-wrap' }}>{explanation.summary}</p>
+                        </CollapsibleSection>
+                    )}
 
-                    <CollapsibleSection title="2. Line-by-line explanation">
-                        <ul style={{ paddingLeft: '1.2rem', margin: 0 }}>
-                            <li><code>Line 1</code>: Defines the function named <code>calculate</code>.</li>
-                            <li><code>Line 2</code>: Checks if the number is less than 0.</li>
-                            <li><code>Line 3</code>: Returns an error/null if so.</li>
-                            <li><em>(Placeholder for detailed steps)</em></li>
-                        </ul>
-                    </CollapsibleSection>
+                    {explanation.lineByLine && (
+                        <CollapsibleSection title="2. Line-by-line explanation">
+                            <p style={{ whiteSpace: 'pre-wrap' }}>{explanation.lineByLine}</p>
+                        </CollapsibleSection>
+                    )}
 
-                    <CollapsibleSection title="3. Logic flow">
-                        <p>The code follows a <strong>recursive</strong> pattern (or iterative, depending on input). It starts at the top level and calls itself with <code>n-1</code> until it reaches the base case.</p>
-                        <p><em>(Placeholder for logic flow)</em></p>
-                    </CollapsibleSection>
+                    {explanation.logicFlow && (
+                        <CollapsibleSection title="3. Logic flow">
+                            <p style={{ whiteSpace: 'pre-wrap' }}>{explanation.logicFlow}</p>
+                        </CollapsibleSection>
+                    )}
 
-                    <CollapsibleSection title="4. Problems / Bad practices">
-                        <div style={{ borderLeft: '3px solid #dba642', paddingLeft: '1rem', background: 'rgba(219, 166, 66, 0.1)', padding: '0.5rem 1rem' }}>
-                            <strong>Warning:</strong> No input validation for non-integers.
-                        </div>
-                        <p style={{ marginTop: '0.5rem' }}>Variable names like <code>x</code> are vague. Use descriptive names like <code>inputNumber</code>.</p>
-                    </CollapsibleSection>
+                    {explanation.issues && (
+                        <CollapsibleSection title="4. Problems / Bad practices">
+                            <div style={{ borderLeft: '3px solid #dba642', paddingLeft: '1rem', background: 'rgba(219, 166, 66, 0.1)', padding: '0.5rem 1rem' }}>
+                                <p style={{ whiteSpace: 'pre-wrap', margin: 0 }}>{explanation.issues}</p>
+                            </div>
+                        </CollapsibleSection>
+                    )}
 
-                    <CollapsibleSection title="5. Improved version">
-                        <pre style={{
-                            background: '#000',
-                            padding: '1rem',
-                            borderRadius: '4px',
-                            overflowX: 'auto',
-                            border: '1px solid var(--border)'
-                        }}>
-                            {`def factorial(n):
-    if n < 0:
-        raise ValueError("Must be positive")
-    if n == 0:
-        return 1
-    return n * factorial(n-1)`}
-                        </pre>
-                    </CollapsibleSection>
+                    {explanation.improvedVersion && (
+                        <CollapsibleSection title="5. Improved version">
+                            <pre style={{
+                                background: '#0d1117',
+                                padding: '1rem',
+                                borderRadius: '4px',
+                                overflowX: 'auto',
+                                border: '1px solid var(--border)',
+                                color: 'var(--text-primary)'
+                            }}>
+                                <code>{explanation.improvedVersion}</code>
+                            </pre>
+                        </CollapsibleSection>
+                    )}
                 </div>
             )}
         </div>

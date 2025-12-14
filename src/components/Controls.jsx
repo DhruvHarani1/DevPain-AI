@@ -42,7 +42,8 @@ export function Controls({
     language, setLanguage,
     complexity, setComplexity,
     outputLanguage, setOutputLanguage,
-    onExplain
+    onExplain,
+    isLoading
 }) {
     return (
         <div style={{
@@ -100,20 +101,23 @@ export function Controls({
 
                 <button
                     onClick={onExplain}
+                    disabled={isLoading}
                     style={{
-                        background: 'var(--accent)',
-                        color: '#fff',
+                        background: isLoading ? 'var(--bg-tertiary)' : 'var(--accent)',
+                        color: isLoading ? 'var(--text-secondary)' : '#fff',
                         border: 'none',
                         padding: '0.6rem 2rem',
                         borderRadius: '6px',
                         fontSize: '0.95rem',
                         fontWeight: 600,
-                        transition: 'background 0.2s'
+                        transition: 'background 0.2s',
+                        cursor: isLoading ? 'not-allowed' : 'pointer',
+                        opacity: isLoading ? 0.7 : 1
                     }}
-                    onMouseOver={(e) => e.currentTarget.style.background = 'var(--accent-hover)'}
-                    onMouseOut={(e) => e.currentTarget.style.background = 'var(--accent)'}
+                    onMouseOver={(e) => !isLoading && (e.currentTarget.style.background = 'var(--accent-hover)')}
+                    onMouseOut={(e) => !isLoading && (e.currentTarget.style.background = 'var(--accent)')}
                 >
-                    Explain My Code
+                    {isLoading ? 'Explaining...' : 'Explain My Code'}
                 </button>
             </div>
         </div>
