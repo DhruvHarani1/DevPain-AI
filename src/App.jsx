@@ -6,6 +6,8 @@ import { OutputArea } from './components/OutputArea';
 
 function App() {
   const [language, setLanguage] = useState('java');
+  const [complexity, setComplexity] = useState('beginner');
+  const [outputLanguage, setOutputLanguage] = useState('english');
   const [code, setCode] = useState('');
   const [explanation, setExplanation] = useState('');
 
@@ -15,7 +17,7 @@ function App() {
       alert("Please enter some code first.");
       return;
     }
-    setExplanation(`[Mock Explanation]\n\nThis is where the simple explanation for your ${language} code will appear.\n\nIt works by analyzing the code you pasted...`);
+    setExplanation(`[Mock Explanation]\n\nMode: ${complexity.toUpperCase()}\nLanguage: ${outputLanguage.toUpperCase()}\n\nThis is where the simple explanation for your ${language} code will appear.\n\nIt works by analyzing the code you pasted...`);
   };
 
   return (
@@ -25,6 +27,10 @@ function App() {
         <Controls
           language={language}
           setLanguage={setLanguage}
+          complexity={complexity}
+          setComplexity={setComplexity}
+          outputLanguage={outputLanguage}
+          setOutputLanguage={setOutputLanguage}
           onExplain={handleExplain}
         />
         <div style={{
