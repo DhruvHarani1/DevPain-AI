@@ -3,7 +3,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // Middleware
 app.use(cors());
@@ -30,17 +30,15 @@ app.post('/explain', async (req, res) => {
 
     // Check for API Key
     if (!process.env.GEMINI_API_KEY) {
-        console.warn("No GEMINI_API_KEY found. Returning mock data.");
-        // Return mock data after delay
-        return setTimeout(() => {
-             res.json(getMockExplanation(code, language, complexity, outputLanguage));
-        }, 1000);
+        console.warn("No GEMINI_API_KEY found in .env");
+        return res.status(500).json({ error: "Server misconfiguration: No API Key" });
     }
 
     try {
         const { GoogleGenerativeAI } = require("@google/generative-ai");
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        // Using the latest efficient flash model
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
         const fs = require('fs');
         const path = require('path');
