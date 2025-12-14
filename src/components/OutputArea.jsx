@@ -148,16 +148,51 @@ export function OutputArea({ explanation, isLoading, error }) {
 
                     {explanation.improvedVersion && (
                         <CollapsibleSection title="5. Improved version">
-                            <pre style={{
-                                background: '#0d1117',
-                                padding: '1rem',
-                                borderRadius: '4px',
-                                overflowX: 'auto',
-                                border: '1px solid var(--border)',
-                                color: 'var(--text-primary)'
-                            }}>
-                                <code>{explanation.improvedVersion}</code>
-                            </pre>
+                            <div style={{ position: 'relative' }}>
+                                <button
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(explanation.improvedVersion);
+                                        // Could add a temporary "Copied!" state here if we moved this to a sub-component, 
+                                        // but for now a simple alert or text change is tricky without new state.
+                                        // We'll just change the button text using DOM manipulation for simplicity or ideally use a new state.
+                                        // Since we can't easily add state to this big component without refactoring, 
+                                        // let's just make it a simple functional button.
+                                        const btn = document.getElementById('copy-btn');
+                                        if (btn) {
+                                            btn.innerText = 'Copied!';
+                                            setTimeout(() => btn.innerText = 'Copy', 2000);
+                                        }
+                                    }}
+                                    id="copy-btn"
+                                    style={{
+                                        position: 'absolute',
+                                        top: '0.5rem',
+                                        right: '0.5rem',
+                                        background: 'rgba(255,255,255,0.1)',
+                                        border: '1px solid rgba(255,255,255,0.2)',
+                                        color: 'var(--text-secondary)',
+                                        padding: '0.2rem 0.6rem',
+                                        borderRadius: '4px',
+                                        fontSize: '0.8rem',
+                                        cursor: 'pointer',
+                                        zIndex: 10
+                                    }}
+                                >
+                                    Copy
+                                </button>
+                                <pre style={{
+                                    background: '#0d1117',
+                                    padding: '1rem',
+                                    paddingTop: '2rem', // Space for button
+                                    borderRadius: '4px',
+                                    overflowX: 'auto',
+                                    border: '1px solid var(--border)',
+                                    color: 'var(--text-primary)',
+                                    margin: 0
+                                }}>
+                                    <code>{explanation.improvedVersion}</code>
+                                </pre>
+                            </div>
                         </CollapsibleSection>
                     )}
                 </div>

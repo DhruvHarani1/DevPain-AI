@@ -99,7 +99,10 @@ export const generatePDF = (explanation, language, complexity) => {
             y = 20;
         }
         
-        doc.rect(margin, y, contentWidth, codeHeight, 'F');
+        // doc.rect(margin, y, contentWidth, codeHeight, 'F');
+        doc.setDrawColor(200, 200, 200);
+        doc.setLineWidth(0.1);
+        doc.rect(margin, y, contentWidth, codeHeight); // Stroke only (border)
         doc.setTextColor(0, 0, 0);
         doc.setFontSize(10);
         doc.text(codeLines, margin + 5, y + 7);
