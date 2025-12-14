@@ -21,18 +21,72 @@ const getMockExplanation = (code, language, complexity, outputLanguage) => {
 };
 
 // Endpoints
-app.post('/explain', (req, res) => {
+app.post('/explain', async (req, res) => {
     const { code, language, complexity, outputLanguage } = req.body;
 
     if (!code) {
         return res.status(400).json({ error: 'Code is required' });
     }
 
-    // Simulate processing delay
-    setTimeout(() => {
-        const explanation = getMockExplanation(code, language, complexity, outputLanguage);
-        res.json(explanation);
-    }, 1000);
+    // Check for API Key
+    if (!process.env.GEMINI_API_KEY) {
+        console.warn("No GEMINI_API_KEY found. Returning mock data.");
+        // Return mock data after delay
+        return setTimeout(() => {
+             res.json(getMockExplanation(code, language, complexity, outputLanguage));
+        }, 1000);
+    }
+
+    try {
+        const { GoogleGenerativeAI } = require("@google/generative-ai");
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+        const fs = require('fs');
+        const path = require('path');
+        const systemPromptPath = path.join(__dirname, 'ai_prompt.md');
+        let systemPrompt = "";
+        
+        try {
+             systemPrompt = fs.readFileSync(systemPromptPath, 'utf8');
+        } catch (err) {
+            console.error("Could not read system prompt file:", err);
+            // Fallback system prompt if file read fails
+            systemPrompt = "You are an expert coding tutor. Explain the code in simple JSON format.";
+        }
+
+        const userPrompt = `
+        ${systemPrompt}
+
+        ---
+        **Request Details**:
+        - **Language**: ${language}
+        - **Mode**: ${complexity}
+        - **Output Language**: ${outputLanguage}
+        
+        **Code to Explain**:
+        ${code}
+        `;
+
+        const result = await model.generateContent(userPrompt);
+        const responseCallback = await result.response;
+        const text = responseCallback.text();
+        
+        // Basic JSON cleanup (remove markdown code blocks if AI adds them)
+        const cleanJson = text.replace(/```json/g, '').replace(/```/g, '').trim();
+        
+        try {
+            const jsonResponse = JSON.parse(cleanJson);
+            res.json(jsonResponse);
+        } catch (parseError) {
+            console.error("Failed to parse AI response as JSON:", cleanJson);
+            res.status(500).json({ error: "AI response format error", raw: text });
+        }
+
+    } catch (error) {
+        console.error("AI Generation Error:", error);
+        res.status(500).json({ error: "Failed to generate explanation" });
+    }
 });
 
 app.get('/health', (req, res) => {
