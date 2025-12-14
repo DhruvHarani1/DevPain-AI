@@ -49,7 +49,27 @@ export const generatePDF = (explanation, language, complexity) => {
 
     if (explanation.lineByLine) {
         addText("2. Line-by-line Explanation", 14, 'bold');
-        addText(explanation.lineByLine);
+        
+        if (Array.isArray(explanation.lineByLine)) {
+            explanation.lineByLine.forEach(item => {
+                 // Code in monospace
+                 doc.setFont('courier', 'normal');
+                 doc.setFontSize(10);
+                 doc.setTextColor(50, 50, 50); // Darker gray for PDF
+                 
+                 // Render Code
+                 const codeLines = doc.splitTextToSize(item.code, contentWidth);
+                 if (y + (codeLines.length * 5) > doc.internal.pageSize.getHeight() - margin) { doc.addPage(); y = 20; }
+                 doc.text(codeLines, margin, y);
+                 y += (codeLines.length * 5) + 2;
+
+                 // Explanation in normal font
+                 addText(item.explanation, 11, 'normal', [0, 0, 0]);
+                 y += 3; // Extra space between items
+            });
+        } else {
+            addText(explanation.lineByLine);
+        }
         y += 5;
     }
 

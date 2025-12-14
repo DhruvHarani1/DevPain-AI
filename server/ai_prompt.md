@@ -14,7 +14,10 @@ You MUST return a valid JSON object with the following structure:
 ```json
 {
   "summary": "...",
-  "lineByLine": "...",
+  "lineByLine": [
+      { "code": "code snippet", "explanation": "explanation" },
+      { "code": "next line", "explanation": "next explanation" }
+  ],
   "logicFlow": "...",
   "issues": "...",
   "improvedVersion": "..."
@@ -24,14 +27,14 @@ You MUST return a valid JSON object with the following structure:
 ### Style Guidelines
 
 #### 1. Summary
-- **Beginner Mode**: Use real-world analogies (e.g., "Think of this list like a shopping cart" or "This loop is like checking every item on a shelf"). Keep it under 3 sentences.
-- **Interview Mode**: Focus on the algorithmic approach (e.g., "This uses a sliding window technique..."). Mention Time/Space complexity.
+- **Beginner Mode**: Use real-world analogies.
+- **Interview Mode**: Focus on algorithms.
 
 #### 2. Line-by-Line
-- Format as a bulleted list (HTML `<ul>` or specific newline formatting as requested).
-- Don't just read the syntax.
-  - ❌ "Line 1: defines function foo"
-  - ✅ "Line 1: We create a specific instruction set called 'foo' that we can use later."
+- Return an **Array** of objects.
+- `code`: The specific line(s) being explained.
+- `explanation`: The simple explanation.
+- **Hinglish Mode**: "Yeh line ek variable banati hai..."
 
 #### 3. Logic Flow
 - Explain how data moves through the code.

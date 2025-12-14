@@ -100,7 +100,35 @@ export function OutputArea({ explanation, isLoading, error }) {
 
                     {explanation.lineByLine && (
                         <CollapsibleSection title="2. Line-by-line explanation">
-                            <p style={{ whiteSpace: 'pre-wrap' }}>{explanation.lineByLine}</p>
+                            {Array.isArray(explanation.lineByLine) ? (
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                    {explanation.lineByLine.map((item, idx) => (
+                                        <div key={idx} style={{
+                                            paddingLeft: '0.8rem',
+                                            borderLeft: '2px solid var(--accent)'
+                                        }}>
+                                            <div style={{
+                                                fontFamily: 'monospace',
+                                                background: 'rgba(255,255,255,0.05)',
+                                                padding: '0.2rem 0.5rem',
+                                                borderRadius: '4px',
+                                                display: 'inline-block',
+                                                fontSize: '0.85rem',
+                                                marginBottom: '0.3rem',
+                                                color: 'var(--accent)',
+                                                border: '1px solid rgba(255,255,255,0.1)'
+                                            }}>
+                                                {item.code}
+                                            </div>
+                                            <div style={{ color: 'var(--text-primary)', fontSize: '0.95rem', lineHeight: '1.5' }}>
+                                                {item.explanation}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <p style={{ whiteSpace: 'pre-wrap' }}>{explanation.lineByLine}</p>
+                            )}
                         </CollapsibleSection>
                     )}
 
